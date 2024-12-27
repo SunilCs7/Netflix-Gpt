@@ -1,13 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { BACKGROUD_IMG } from "../utils/Constants";
+import {checkValidData} from "../utils/validate"
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  
+  const email = useRef(null);
+  const password = useRef(null);
+  const name = useRef(null);
+
+  const handleButtonClick = () => {
+    // form validation
+    const message = checkValidData(
+      email.current.value,
+      password.current.value,
+      isSignInForm ? null : name.current.value // handle the case where name might not be needed
+    );
+    setErrorMessage(message);
+  }
+
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
+
+
+
+
+
 
   return (
     <div
@@ -20,6 +42,8 @@ const Login = () => {
 
       {/* Form */}
       <form
+        onSubmit={(e) => e.preventDefault()}
+
         className="w-11/12 max-w-md p-8 bg-black bg-opacity-80 text-white rounded-lg shadow-md "
       >
         <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
@@ -28,6 +52,7 @@ const Login = () => {
 
         {!isSignInForm && (
           <input
+             ref={name}
             type="text"
             placeholder="Full Name"
             className="w-full mb-4 p-3 bg-gray-800 rounded-lg focus:outline-none focus:ring focus:ring-red-500"
@@ -36,12 +61,14 @@ const Login = () => {
 
         <input
           type="text"
+           ref={email}
           placeholder="Enter Email Address"
           className="w-full mb-4 p-3 bg-gray-800 rounded-lg focus:outline-none focus:ring focus:ring-red-500"
         />
 
         <input
           type="password"
+           ref={password}
           placeholder="Enter Password"
           className="w-full mb-6 p-3 bg-gray-800 rounded-lg focus:outline-none focus:ring focus:ring-red-500"
         />
@@ -63,8 +90,10 @@ const Login = () => {
             </select>
           </div>
         )}
+        <p className="font-bold text-sm text-red-900  py-3">{errorMessage}</p>
 
         <button
+          onClick={handleButtonClick}
           type="submit"
           className="w-full py-3 bg-red-700 hover:bg-red-600 transition-colors rounded-lg font-semibold text-lg"
         >
@@ -72,7 +101,7 @@ const Login = () => {
         </button>
 
         <p
-          className="mt-6 text-center text-sm underline cursor-pointer"
+          className="mt-6 text-center text-sm underline  cursor-pointer"
           onClick={toggleSignInForm}
         >
           {isSignInForm
