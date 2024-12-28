@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { BACKGROUD_IMG } from "../utils/Constants";
-import {checkValidData} from "../utils/validate"
+import { checkValidData } from "../utils/validate"
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
+
+import {auth} from "../utils/firebase"
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -19,19 +22,64 @@ const Login = () => {
       isSignInForm ? null : name.current.value // handle the case where name might not be needed
     );
     setErrorMessage(message);
+
+    if (message) return;
+
+
+    // signUp logic
+    if (!isSignInForm) {
+
+
+      createUserWithEmailAndPassword(auth,  email.current.value,
+      password.current.value)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    // console.log(user);
+{
+  user && alert("User successfully registered")
+}
+
+   
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMessage(errorMessage+ "_"+ errorCode);
+  });
+
+
+    }
+    else {
+      // signIn logic
+
+      signInWithEmailAndPassword(auth,  email.current.value,
+      password.current.value)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    console.log(user);
+    {
+  user && alert("User successfully LogedIn")
+}
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMessage(errorMessage + "_" + errorCode);
+  
+  });
+
+
+    }
+
   }
 
+    const toggleSignInForm = () => {
+      setIsSignInForm(!isSignInForm);
+    }
 
-  const toggleSignInForm = () => {
-    setIsSignInForm(!isSignInForm);
-  };
+  
 
-
-
-
-
-
-  return (
+return (
     <div
       className="relative h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center"
       style={{ backgroundImage: `url(${BACKGROUD_IMG})` }}
@@ -97,8 +145,19 @@ const Login = () => {
           type="submit"
           className="w-full py-3 bg-red-700 hover:bg-red-600 transition-colors rounded-lg font-semibold text-lg"
         >
-          {isSignInForm ? "Sign In" : "Sign Up"}
-        </button>
+        {isSignInForm ? "Sign In" : "Sign Up"}
+
+      
+      </button>
+  
+      
+
+  {/* {
+  errorMessage ? <p className="text-red-500"> Wrong Email and Password</p> : null
+} */}
+      
+      
+
 
         <p
           className="mt-6 text-center text-sm underline  cursor-pointer"
@@ -110,7 +169,7 @@ const Login = () => {
         </p>
       </form>
     </div>
-  );
-};
-
+    );
+    
+  }
 export default Login;
