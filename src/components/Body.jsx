@@ -1,57 +1,58 @@
-import React, { useEffect } from "react";
-import Browse from "./Browse";
-import Login from "./Login";
-import { createBrowserRouter} from "react-router-dom";
+import React, { useEffect } from 'react'
+import Browse from './Browse'
+import Login from './Login'
+import { NETFLIX_UserIcon } from '../utils/Constants'
+import { createBrowserRouter } from 'react-router-dom'
 
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider } from 'react-router-dom'
 
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../utils/firebase";
-import { useDispatch } from "react-redux";
-import {addUser, removeUser } from "../utils/userSlice"
-
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../utils/firebase'
+import { useDispatch } from 'react-redux'
+import { addUser, removeUser } from '../utils/userSlice'
 
 const Body = () => {
-  const dispatch = useDispatch();
-
+  const dispatch = useDispatch()
 
   const approuter = createBrowserRouter([
     {
-      path: "/",
-      element: <Login />,
+      path: '/',
+      element: <Login />
     },
     {
-      path: "/browse",
-      element: <Browse />,
-    },
-  ]);
-
-
+      path: '/browse',
+      element: <Browse />
+    }
+  ])
 
   // firebase api
-  
+
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       if (user) {
-      // User is signedIN,signedUp
+        // User is signedIN,signedUp
 
-        const { uid, email, displayName, photoURL } = user;
-        dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL}));
-  } else {
+        const { uid, email, displayName, photoURL } = user
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL
+          })
+        )
+      } else {
         // User is signed out
-        dispatch(removeUser());
-    
-  }
-});
-  },[])
-
-
+        dispatch(removeUser())
+      }
+    })
+  }, [])
 
   return (
     <div>
       <RouterProvider router={approuter} />
     </div>
-  );
-};
+  )
+}
 
-export default Body;
+export default Body
