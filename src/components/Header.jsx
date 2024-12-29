@@ -4,9 +4,11 @@ import{NETFLIX_UserIcon} from "../utils/Constants"
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const navigate = useNavigate();
+  const user=useSelector((state)=>state.user);
   const handleSignOut = () => {
     signOut(auth).then(() => {
       // Sign-out successful. so nagivate to login page
@@ -31,10 +33,10 @@ const Header = () => {
       
       {/* Netfilx userIcon and button */}
 
-      <div className="flex p-2">
+      { user &&<div className="flex p-2">
         <img
           className="w-12 h-12"
-          src={NETFLIX_UserIcon}
+          src={user?.photoURL}
           alt="userIcon"
         />
         <button
@@ -44,7 +46,7 @@ const Header = () => {
           (Sign Out)
         </button>
       </div>
-      
+      }
 
 
     </div> 
