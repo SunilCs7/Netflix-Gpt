@@ -1,20 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Header from './Header'
-import { API_OPTIONS } from '../utils/Constants'
+
+import useNowPlayingMovies from '../CustomHook/useNowPlayingMovies'
 
 const Browse = () => {
-  const getNowPlayomgMovies =async () => {
-    const data = await fetch('https://api.themoviedb.org/3/movie/now_playing?page=1', API_OPTIONS);
-    const json = await data.json();
-    console.log(json.results);
+//  Fetch data from TMBD Movies API and update the store all login inside Custom Hook
 
-    
-  }
+  useNowPlayingMovies();
 
-  useEffect(() => {
-    getNowPlayomgMovies();
-  },[]
-  );
 
 
   return (
