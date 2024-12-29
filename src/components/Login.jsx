@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
+import { NETFLIX_UserIcon } from "../utils/Constants";
 import { BACKGROUD_IMG } from "../utils/Constants";
 import { checkValidData } from "../utils/validate"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -42,7 +43,7 @@ const Login = () => {
     // update the user profile
 
     updateProfile(user, {
-  displayName: name.current.value, photoURL: "https://avatars.githubusercontent.com/u/122697413?v=4"
+  displayName: name.current.value, photoURL: NETFLIX_UserIcon
 }).then(() => {
   // Profile updated  so navigate to browse
      const { uid, email, displayName, photoURL } = auth.currentUser;
