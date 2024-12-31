@@ -5,12 +5,19 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import { toggleGptSearchView } from "../utils/gptSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
     const dispatch = useDispatch()
 
+  
+
+  const handleGptSearchClick = () => {
+    dispatch(toggleGptSearchView());
+
+  }
   
 
 
@@ -66,17 +73,23 @@ const Header = () => {
       
       {/* Netfilx userIcon and button */}
 
-      { user &&<div className="flex p-2">
+      {user && <div className="flex p-2">
+        <button
+          className="py-2 px-4 mx-4 my-2 text-white bg-green-600 rounded-lg "
+          onClick={handleGptSearchClick}
+        >
+          GPT Search
+        </button>
         <img
           className="w-12 h-12"
           src={user?.photoURL}
           alt="userIcon"
         />
         <button
-          className="font-bold text-white"
+          className="font-bold text-white cursor-pointer  bg-red-600 py-2 px-4 mx-4 my-2 rounded-lg"
           onClick={handleSignOut}
         >
-          (Sign Out)
+          Sign Out
         </button>
       </div>
       }
